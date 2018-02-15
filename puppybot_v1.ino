@@ -35,8 +35,10 @@ void loop()  {
     bool NoiseLevel = micTest(); 
   
   // Check For Patting
+  bool HeadPat = flexDifference(HEADFLEX); 
 
   // Check For Hugging
+   bool Hugging = flexDifference(BODYFLEX); 
 
   // If Noisy AND Head Pat AND Hugging
   if (NoiseLevel == HIGH && HeadPat == HIGH && Hugging == HIGH) {
@@ -170,6 +172,7 @@ bool micTest() {
    }
    peakToPeak = signalMax - signalMin;  // max - min = peak-peak amplitude
    double volts = (peakToPeak * 5.0) / 10;  // convert to volt
+   bool k;
    if (volts>20)
         bool k = HIGH;
    else 
@@ -178,7 +181,7 @@ bool micTest() {
    return k;
   }
 
-double flexDifference(int pin) {
+bool flexDifference(int pin) {
   double flexInitial;
   double flexFinal;
   double flexDifference; 
@@ -186,10 +189,11 @@ double flexDifference(int pin) {
   delay(400);
   flexFinal= analogRead(pin);
   flexDifference = (abs(flexInitial-flexFinal)/(abs(flexInitial+flexFinal)/2) * 100);
-  return flexDifference;
+   bool k;
+  if (flexDifference>5)
+        bool k = HIGH;
+   else 
+        bool k = LOW;
+   return k;
 }
-
-
-
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
