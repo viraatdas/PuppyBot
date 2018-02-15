@@ -11,6 +11,9 @@ int TAIL = 9;      // Tail servo pin
 Servo headSERVO;   // create servo object for the head servo
 Servo tailSERVO;   // create servo object for the tail servo
 
+const int sampleWindow = 50; // Sample window width in mS (50 mS = 20Hz)
+unsigned int sample;
+
 // Now Inputs...
 int MIC = A0;      // Microphone pin
 int BODYFLEX = A1; // Body flex sensor pin
@@ -29,6 +32,7 @@ void setup() {
 /////////////////////////////////////// Main Code /////////////////////////////////////////////////////////////////
 void loop()  {
   // Check Noise Level
+    bool NoiseLevel = micTest(); 
   
   // Check For Patting
 
@@ -141,6 +145,38 @@ void servoreset() {
 
 
 // Now Input Functions...
+bool micTest() {
+       unsigned long startMillis= millis();  // Start of sample window
+   unsigned int peakToPeak = 0;   // peak-to-peak level
+
+   unsigned int signalMax = 0;
+   unsigned int signalMin = 1024;
+
+   // collect data for 50 mS
+   while (millis() - startMillis < sampleWindow)
+   {
+      sample = analogRead(MIC);
+      if (sample < 1024)  // toss out spurious readings
+      {
+         if (sample > signalMax)
+         {
+            signalMax = sample;  // save just the max levels
+         }
+         else if (sample < signalMin)
+         {
+            signalMin = sample;  // save just the min levels
+         }
+      }
+   }
+   peakToPeak = signalMax - signalMin;  // max - min = peak-peak amplitude
+   double volts = (peakToPeak * 5.0) / 10;  // convert to volt
+   if (volts>20)
+        bool k = HIGH;
+   else 
+        bool k = LOW;
+
+   return k;
+  }
 
 double flexDifference(int pin) {
   double flexInitial;
