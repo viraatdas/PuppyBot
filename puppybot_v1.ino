@@ -142,4 +142,18 @@ void servoreset() {
 
 // Now Input Functions...
 
+double flexDifference(int pin) {
+  double flexInitial;
+  double flexFinal;
+  double flexDifference; 
+  flexInitial = analogRead(pin);
+  delay(400);
+  flexFinal= analogRead(pin);
+  flexDifference = (abs(flexInitial-flexFinal)/(abs(flexInitial+flexFinal)/2) * 100);
+  return flexDifference;
+}
+
+
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
