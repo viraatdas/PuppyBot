@@ -32,7 +32,7 @@ void setup() {
 /////////////////////////////////////// Main Code /////////////////////////////////////////////////////////////////
 void loop()  {
   // Check Noise Level
-    bool NoiseLevel = micTest(); 
+  bool NoiseLevel = micTest(); 
   
   // Check For Patting
   bool HeadPat = flexDifference(HEADFLEX); 
@@ -147,6 +147,7 @@ void servoreset() {
 
 
 // Now Input Functions...
+// Read Audio Loudness Levels from Microphone (And Threshold)
 bool micTest() {
        unsigned long startMillis= millis();  // Start of sample window
    unsigned int peakToPeak = 0;   // peak-to-peak level
@@ -181,6 +182,7 @@ bool micTest() {
    return k;
   }
 
+// Read Flex Difference Levels from Flex Sensors (And Threshold)
 bool flexDifference(int pin) {
   double flexInitial;
   double flexFinal;
