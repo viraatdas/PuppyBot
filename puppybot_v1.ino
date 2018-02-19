@@ -32,6 +32,7 @@ void setup() {
 
 /////////////////////////////////////// Main Code /////////////////////////////////////////////////////////////////
 void loop()  {
+  
 
   // Check Noise Level
   bool NoiseLevel = micTest(); 
@@ -39,8 +40,10 @@ void loop()  {
   // Check For Patting
   bool HeadPat = flexDifference(HEADFLEX, 0.5); 
 
+
   // Check For Hugging
    bool Hugging = flexDifference(BODYFLEX, 0.3); 
+
 
   // If Noisy AND Head Pat AND Hugging
   if (NoiseLevel == HIGH && HeadPat == HIGH && Hugging == HIGH) {
@@ -98,8 +101,8 @@ void loop()  {
 // Output Functions First...
 // Dog Bark Code
 void bark() {
-  int DurationPerHertz = 10;
-  for(int i = 440; i<7040; i+=1){
+  int DurationPerHertz = 50;
+  for(int i = 440; i<7040; i+=10){
   tone(SPEAKER,i,DurationPerHertz);  
   }
 }
@@ -107,8 +110,8 @@ void bark() {
 // Head turn Code
 void headturn() {
   int rightpos = 30;
-  int leftpos = 150;
-  int delaytime = 100;
+  int leftpos = 180;
+  int delaytime = 500;
   headSERVO.write(rightpos);
   delay(delaytime);
   headSERVO.write(leftpos);
@@ -117,8 +120,8 @@ void headturn() {
 
 // Tail swish Code
 void tailswish() {
-  int rightpos = 30;
-  int leftpos = 150;
+  int rightpos = 50;
+  int leftpos = 170;
   int delaytime = 100;
   tailSERVO.write(rightpos);
   delay(delaytime);
@@ -142,7 +145,7 @@ void heartbeat() {
 // Servo Reset Code
 void servoreset() {
   int headneutralpos = 90;
-  int tailneutralpos = 90;
+  int tailneutralpos = 70;
   headSERVO.write(headneutralpos); 
   tailSERVO.write(tailneutralpos);
 }
@@ -150,7 +153,7 @@ void servoreset() {
 
 // Now Input Functions...
 // Read Audio Loudness Levels from Microphone (And Threshold)
-int micTest() {
+bool micTest() {
        unsigned long startMillis= millis();  // Start of sample window
    unsigned int peakToPeak = 0;   // peak-to-peak level
 
@@ -175,14 +178,14 @@ int micTest() {
    }
    peakToPeak = signalMax - signalMin;  // max - min = peak-peak amplitude
    double volts = (peakToPeak * 5.0) / 10;  // convert to volt
-   int k;
+   bool k;
    if (volts>1)
    {
-        k = 1;
+        k = HIGH;
    }
    else 
    {
-        k = 0;
+        k = LOW;
    }
 
    return k;
