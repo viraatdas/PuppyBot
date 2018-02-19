@@ -32,15 +32,15 @@ void setup() {
 
 /////////////////////////////////////// Main Code /////////////////////////////////////////////////////////////////
 void loop()  {
-  
+
   // Check Noise Level
   bool NoiseLevel = micTest(); 
   
   // Check For Patting
-  bool HeadPat = flexDifference(HEADFLEX); 
+  bool HeadPat = flexDifference(HEADFLEX, 0.5); 
 
   // Check For Hugging
-   bool Hugging = flexDifference(BODYFLEX); 
+   bool Hugging = flexDifference(BODYFLEX, 0.3); 
 
   // If Noisy AND Head Pat AND Hugging
   if (NoiseLevel == HIGH && HeadPat == HIGH && Hugging == HIGH) {
@@ -189,7 +189,7 @@ int micTest() {
   }
 
 // Read Flex Difference Levels from Flex Sensors (And Threshold)
-bool flexDifference(int pin) {
+bool flexDifference(int pin, double threshold) {
   double flexInitial;
   double flexFinal;
   double flexDifference; 
@@ -197,11 +197,11 @@ bool flexDifference(int pin) {
   delay(400);
   flexFinal= analogRead(pin);
   flexDifference = (abs(flexInitial-flexFinal)/(abs(flexInitial+flexFinal)/2) * 100);
-   bool k;
-  if (flexDifference>5)
-        bool k = HIGH;
+   bool n;
+  if (flexDifference>threshold)
+        n = HIGH;
    else 
-        bool k = LOW;
-   return k;
+        n = LOW;
+   return n;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
