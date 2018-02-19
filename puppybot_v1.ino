@@ -20,6 +20,7 @@ int BODYFLEX = A1; // Body flex sensor pin
 int HEADFLEX = A2; // Head flex sensor pin
 
 void setup() {
+  Serial.begin(9600);
   headSERVO.attach(HEAD);
   pinMode(VIBRATOR,OUTPUT);
   pinMode(SPEAKER,OUTPUT);
@@ -31,6 +32,7 @@ void setup() {
 
 /////////////////////////////////////// Main Code /////////////////////////////////////////////////////////////////
 void loop()  {
+  
   // Check Noise Level
   bool NoiseLevel = micTest(); 
   
@@ -148,7 +150,7 @@ void servoreset() {
 
 // Now Input Functions...
 // Read Audio Loudness Levels from Microphone (And Threshold)
-bool micTest() {
+int micTest() {
        unsigned long startMillis= millis();  // Start of sample window
    unsigned int peakToPeak = 0;   // peak-to-peak level
 
@@ -173,11 +175,15 @@ bool micTest() {
    }
    peakToPeak = signalMax - signalMin;  // max - min = peak-peak amplitude
    double volts = (peakToPeak * 5.0) / 10;  // convert to volt
-   bool k;
-   if (volts>20)
-        bool k = HIGH;
+   int k;
+   if (volts>1)
+   {
+        k = 1;
+   }
    else 
-        bool k = LOW;
+   {
+        k = 0;
+   }
 
    return k;
   }
